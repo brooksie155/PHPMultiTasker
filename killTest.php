@@ -44,6 +44,23 @@ function childTask() {
     }
 }
 
+function waitTask() 
+{    
+    /** run task until task is complete, i.e. prevent scheduler for moving on **/
+}
+
+function execTask() 
+{
+    /** execute some other task in place of the current one ? **/
+}
+
+function forkTask() 
+{ 
+    /** Clone Task and pass to newTask() ? **/
+}
+
+
+
 function task() {
     $tid = (yield getTaskId());
     $childTid = (yield newTask(childTask()));
