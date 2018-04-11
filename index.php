@@ -1,24 +1,32 @@
 <?php
+
 require('Task.php');
 require('Scheduler.php');
+require('SystemCall.php');
 
-function task1() {
-    for ($i = 1; $i <= 10; ++$i) {
-        echo "This is task 1 iteration $i.\n";
-        yield;
-    }
+function getTaskId() 
+{
+    return new SystemCall(
+        function(Task $task, Scheduler $scheduler) 
+        {
+            $task->setSendValue($task->getTaskId());
+            $scheduler->schedule($task);
+        }
+    );
 }
 
-function task2() {
-    for ($i = 1; $i <= 5; ++$i) {
-        echo "This is task 2 iteration $i.\n";
+function task($max) 
+{
+    $tid = (yield getTaskId()); // <-- here's the syscall!
+    for ($i = 1; $i <= $max; ++$i) {
+        echo "This is task $tid iteration $i.\n";
         yield;
     }
 }
 
 $scheduler = new Scheduler;
 
-$scheduler->newTask(task1());
-$scheduler->newTask(task2());
+$scheduler->newTask(task(10));
+$scheduler->newTask(task(5));
 
 $scheduler->run();
