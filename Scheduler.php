@@ -41,6 +41,31 @@ class Scheduler
 
     /**
      * 
+     * @param int $tid
+     * @return boolean
+     */
+    public function killTask(int $tid) : bool
+    {
+        if (!isset($this->taskMap[$tid])) {
+            return false;
+        }
+
+        unset($this->taskMap[$tid]);
+
+        // This is a bit ugly and could be optimized so it does not have to walk the queue,
+        // but assuming that killing tasks is rather rare I won't bother with it now
+        foreach ($this->taskQueue as $i => $task) {
+            if ($task->getTaskId() === $tid) {
+                unset($this->taskQueue[$i]);
+                break;
+            }
+        }
+
+        return true;
+    }    
+    
+    /**
+     * 
      * @param Task $task
      */
     public function schedule(Task $task) 
