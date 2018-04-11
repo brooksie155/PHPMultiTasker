@@ -29,6 +29,9 @@ class WebServerScheduler extends Scheduler
         }
     }   
     
+    
+    // ---- 
+    // Following methods don't appear to be used just now ?
     protected function ioPoll($timeout) 
     {
         $rSocks = [];
@@ -77,5 +80,11 @@ class WebServerScheduler extends Scheduler
             yield;
         }
     }    
+    
+    public function run()
+    {
+       // $this->newTask($this->ioPollTask());
+        return parent::run();
+    }
     
 }
